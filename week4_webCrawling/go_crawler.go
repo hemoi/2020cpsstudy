@@ -15,6 +15,7 @@ type result struct {
 	link  string
 	title string
 	tag   string
+	flag  bool
 }
 
 func main() {
@@ -41,9 +42,12 @@ func main() {
 	fmt.Print("search ...")
 
 	for _, result := range results {
-		if strings.Contains(result.title, "2019") {
+		if strings.Contains(result.title, "Soulick") {
 			cnt++
-			go searchUserWant(result.link, resultChan)
+			if result.flag == true {
+				go searchUserWant(result.link, resultChan)
+			}
+			result.flag = false
 		}
 	}
 
@@ -76,7 +80,7 @@ func searchUserWant(link string, c chan []string) {
 		r := <-tmpChannel
 		// result = append(result, r)
 		fmt.Println(r)
-		fmt.Println("")
+		fmt.Println("...")
 	}
 	c <- result
 }
@@ -155,7 +159,7 @@ func inputValue(cont *goquery.Selection, c chan<- result) {
 	result.link, _ = cont.Find("a").Attr("href")
 	result.link = "https://security.cau.ac.kr/board.htm" + result.link
 	result.title, _ = iconv.ConvertString(cont.Find("a").Text(), "euc-kr", "utf-8")
-
+	result.flag = true
 	fmt.Println(result.title)
 
 	// 태그 분리
