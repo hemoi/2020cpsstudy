@@ -6,6 +6,7 @@ import (
 	"net/http"
 	"strconv"
 	"strings"
+	"time"
 
 	"github.com/PuerkitoBio/goquery"
 	"github.com/djimenez/iconv-go"
@@ -34,31 +35,32 @@ func main() {
 		// ...을 할 경우 값들만 돌려 받게 된다.
 		results = append(results, r...)
 	}
+	fmt.Println(len(results))
 
+	time.Sleep(time.Second * 10)
 	// var inputStr string
+	// resultChan := make(chan []string)
 	cnt := 0
-	resultChan := make(chan []string)
-
-	fmt.Print("search ...")
 
 	for _, result := range results {
-		if strings.Contains(result.title, "Soulick") {
+		if strings.Contains(result.title, "2019") {
 			cnt++
 			if result.flag == true {
-				go searchUserWant(result.link, resultChan)
+				fmt.Println(searchUserWant(result.link))
 			}
 			result.flag = false
 		}
 	}
 
-	i := 0
-	for i < cnt {
-		<-resultChan
-	}
+	// i := 0
+	// for i < cnt {
+	// 	<-resultChan
+	// }
 
 }
 
-func searchUserWant(link string, c chan []string) {
+func searchUserWant(link string) []string {
+	fmt.Print("search ...")
 	fmt.Println(link)
 	res, err := http.Get(link)
 	checkErr(err)
@@ -66,40 +68,36 @@ func searchUserWant(link string, c chan []string) {
 
 	doc, err := goquery.NewDocumentFromReader(res.Body)
 	checkErr(err)
-	tmpChannel := make(chan []string)
 
-	var result []string
+	result := []string{}
 
 	doc.Find(".cont").Each(func(i int, contents *goquery.Selection) {
 		// fmt.Println("OK, Find")
-		go inputUserWant(contents, tmpChannel)
+		result = append(result, inputUserWant(contents))
 	})
 
 	// fmt.Println("searchFin")
-	for i := 0; i < doc.Find(".cont").Length(); i++ {
-		r := <-tmpChannel
-		// result = append(result, r)
-		fmt.Println(r)
-		fmt.Println("...")
-	}
-	c <- result
+	// for i := 0; i < doc.Find(".cont").Length(); i++ {
+	// 	result = append(result, r)
+	// 	// fmt.Println(r)
+	// }
+
+	return result
 }
 
-func inputUserWant(cont *goquery.Selection, c chan<- []string) {
+func inputUserWant(cont *goquery.Selection) string {
 	// for i := 0; i < cont.Find("span").Length(); i++ {
 	// result, _ := iconv.ConvertString(cont.Find("span").Text(), "euc-kr", "utf-8")
-	var results []string
+	var results string
 	cont.Find("span").Each(func(i int, contents *goquery.Selection) {
 		if contents.Text() != "" {
 			result, _ := iconv.ConvertString(contents.Text(), "euc-kr", "utf-8")
-			results = append(results, result)
+			results = results + result
 		}
 	})
 
 	// fmt.Println("fin")
-	if len(results) != 0 {
-		c <- results
-	}
+	return results
 }
 
 func getPages() string {
