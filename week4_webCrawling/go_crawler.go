@@ -6,7 +6,6 @@ import (
 	"net/http"
 	"strconv"
 	"strings"
-	"time"
 
 	"github.com/PuerkitoBio/goquery"
 	"github.com/djimenez/iconv-go"
@@ -37,16 +36,18 @@ func main() {
 	}
 	fmt.Println(len(results))
 
-	time.Sleep(time.Second * 10)
-	// var inputStr string
-	// resultChan := make(chan []string)
+	// time.Sleep(time.Second * 10)
 	cnt := 0
-
+	var tmpStr []string
 	for _, result := range results {
 		if strings.Contains(result.title, "2019") {
 			cnt++
 			if result.flag == true {
-				fmt.Println(searchUserWant(result.link))
+				tmpStr = searchUserWant(result.link)
+				if len(tmpStr) != 0 {
+					fmt.Println(tmpStr)
+				}
+
 			}
 			result.flag = false
 		}
@@ -89,15 +90,25 @@ func inputUserWant(cont *goquery.Selection) string {
 	// for i := 0; i < cont.Find("span").Length(); i++ {
 	// result, _ := iconv.ConvertString(cont.Find("span").Text(), "euc-kr", "utf-8")
 	var results string
-	cont.Find("span").Each(func(i int, contents *goquery.Selection) {
+	cont.Children().Each(func(i int, contents *goquery.Selection) {
 		if contents.Text() != "" {
 			result, _ := iconv.ConvertString(contents.Text(), "euc-kr", "utf-8")
 			results = results + result
 		}
+
 	})
 
+	// cont.Find("span").Each(func(i int, contents *goquery.Selection) {
+	// 	if contents.Text() != "" {
+	// 		result, _ := iconv.ConvertString(contents.Text(), "euc-kr", "utf-8")
+	// 		results = results + result
+	// 	}
+	// })
+
 	// fmt.Println("fin")
+
 	return results
+
 }
 
 func getPages() string {
@@ -138,6 +149,7 @@ func getContents(page int, contentsChan chan []result) {
 	doc.Find(".al").Each(func(i int, contents *goquery.Selection) {
 		go inputValue(contents, c)
 	})
+
 	for i := 0; i < doc.Find(".al").Length(); i++ {
 		r := <-c
 		result = append(result, r)
@@ -148,7 +160,7 @@ func getContents(page int, contentsChan chan []result) {
 
 func checkStatusCode(resp *http.Response) {
 	if resp.StatusCode != 200 {
-		log.Fatalf("status code error: %d %s", resp.StatusCode, resp.Status)
+		fmt.Printf("status code error: %d %s", resp.StatusCode, resp.Status)
 	}
 }
 
