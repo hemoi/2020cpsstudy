@@ -1,5 +1,14 @@
 ### week4_webCrawling
 ---
+
+- hyperledger_crawler.py
+  - hyperledger 2.0 doc 크롤링
+    - 메뉴에 있는 링크를 따와서 각 페이지를 크롤링하는 코드작성  
+
+- hyperledger_crawling.txt
+  - hyperledger_crawler.py 에서 생성된 파일
+  - 2.0 document의 본문이 담겨있음
+
 - go_crawler.go
   - 산업보안학과 페이지를 크롤링
     - 제목 [ 학과 ] 를 추출해서 따로 학과라는 태그를 추가함
@@ -19,10 +28,3 @@
 - indeed.csv
   - indeed_crawler에서 생성된 파일  
   
-- hyperledger_crawler.py
-  - hyperledger 2.0 doc 크롤링
-    - 메뉴에 있는 링크를 따와서 각 페이지를 크롤링하는 코드작성  
-
-- hyperledger_crawling.txt
-  - hyperledger_crawler.py 에서 생성된 파일
-  - 2.0 document의 본문이 담겨있음
