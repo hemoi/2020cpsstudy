@@ -19,3 +19,10 @@
 - indeed.csv
   - indeed_crawler에서 생성된 파일
   
+- hyperledger_crawler.py
+  - hyperledger 2.0 doc 크롤링
+    - 메뉴에 있는 각 링크를 따와서 각 페이지를 크롤링하는 코드작성
+    - 실행은 문제없이 되지만 js기반이라 동일한 text만 나옴
+
+- hyperledger_crawling.txt
+  - hyperledger_crawler.py 에서 생성된 파일
