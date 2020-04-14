@@ -13,7 +13,7 @@ class Scraper():
 
     def getHTML(self, url):
         # request web page
-        res = requests.get(self.url)
+        res = requests.get(url)
 
         # request error
         if res.status_code != 200:
