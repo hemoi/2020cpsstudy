@@ -1,15 +1,22 @@
 import requests
 from bs4 import BeautifulSoup
-import csv
 import sys
-class Scraper():
-    def __init__(self):
-        # url hyperledger fabric 2.0
+from PyQt5 import QtCore, QtGui, QtWidgets, uic
+
+class Scraper(QtCore.QObject):
+
+    updated = QtCore.pyqtSignal(int)
+
+    def __init__(self, textBrowser):
+        # url hyperledger fabric 2.
+        super().__init__()
+
         self.url = "https://hyperledger-fabric.readthedocs.io/en/release-2.0/"
         self.menuLists = []
         self.rootSoup = self.getHTML(self.url)
 
-        self.menuLists = self.getUrlLists(self.rootSoup)
+        self.textBrowser = textBrowser
+        self.menuLists, self.urllen = self.getUrlLists(self.rootSoup)
 
     def getHTML(self, url):
         # request web page
@@ -36,7 +43,8 @@ class Scraper():
             # if find attrs 'href' then add to lists
             urlLists.append(i.attrs['href'])
 
-        return urlLists
+        lenLists = len(urlLists)
+        return urlLists, lenLists
 
     def getText(self, soup) :
         # title, text
@@ -61,6 +69,7 @@ class Scraper():
     def crawling(self):
         file = open('./hyperledger_crawling.txt', 'w')
 
+        n = 1
         for i in self.menuLists:
             # make full url
             url = self.url + i
@@ -75,6 +84,11 @@ class Scraper():
 
             # write files
             file.write(str(text) + "\n")
+
+            # emit events
+            self.updated.emit(int((n / self.urllen) * 100))
+            self.textBrowser.append("%d / %d번째 페이지 Done"% (n, self.urllen))
+            n += 1
         
         file.close()
 
@@ -83,6 +97,6 @@ class Scraper():
 
 
 
-if __name__ == "__main__" :
-    s = Scraper()
-    s.crawling()
+# if __name__ == "__main__" :
+#     s = Scraper()
+#     s.crawling()

@@ -7,4 +7,4 @@ email : happy97cjh@gmail.com
   ㄴ indeed_crawler.py  
   ㄴ indeed.csv  
   ㄴ hyperledger_crawler.py  
-  ㄴ hyperledger_crawling.txt
+  ㄴ hyperledger_crawling.txt  
