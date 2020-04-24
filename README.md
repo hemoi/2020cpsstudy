@@ -14,6 +14,6 @@ email : happy97cjh@gmail.com
   ㄴ dicImgCrawler.py  
   ㄴ chrome driver  
   ㄴ img(dir)  
-  ㄴ 실습 (기능 정리) 
+  ㄴ 실습 (기능 정리)  
     ㄴ cauNotice.py  
     ㄴ kyobo.py  
