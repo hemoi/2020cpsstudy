@@ -4,7 +4,7 @@ from bs4 import BeautifulSoup
 import os
 import time
 
-path = os.getcwd() + "/home/hemoi/crawling/chromedriver"
+path = os.getcwd() + "/week6_selenium/chromedriver"
 driver = webdriver.Chrome(path)
 
 try :
@@ -19,7 +19,7 @@ try :
     searchIndex = "파이썬"
     element.send_keys(searchIndex)
 
-    # 검색버튼을 찾아야 한다.
+    # 검색버튼을 찾아야 한다. 이후 클릭
     driver.find_element_by_class_name("btn_search").click()
 
     html = driver.page_source
@@ -27,6 +27,8 @@ try :
 
     conts = bs.find("div", class_ = "list_search_result").find_all("td", class_ = "detail")
 
+    # 만약 버튼을 찾기 원한다면 xpath 복사후
+    driver.find_element_by_xpath().click()
     for c in conts :
         c.find("div", class_ = "title").find("stong").text
 

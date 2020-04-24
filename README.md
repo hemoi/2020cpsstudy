@@ -8,3 +8,12 @@ email : happy97cjh@gmail.com
   ㄴ indeed.csv  
   ㄴ hyperledger_crawler.py  
   ㄴ hyperledger_crawling.txt  
+
+
+- **week6_selenium**  
+  ㄴ dicImgCrawler.py  
+  ㄴ chrome driver  
+  ㄴ img(dir)  
+  ㄴ 실습 (기능 정리) 
+    ㄴ cauNotice.py  
+    ㄴ kyobo.py  
